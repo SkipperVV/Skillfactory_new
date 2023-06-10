@@ -1,12 +1,10 @@
-import sys
+def create_matrix():
+    matrix = [[0] * 3 for i in range(3)]
+    for i in range(3):
+        for j in range(3):
+            matrix[i][j] = '__ !'
+    return matrix
 
-matrix = [[0] * 3 for i in range(3)]
-for i in range(3):
-    for j in range(3):
-        matrix[i][j] = '__ !'
-
-
-play=True
 
 def print_board(matrix):  # напечатать поле
     print("\033[0m")
@@ -16,8 +14,9 @@ def print_board(matrix):  # напечатать поле
         print(row, '!', *element, ' ')
         row += 1
 
-def is_won(player):
-    el=' ' + player + ' !'
+
+def is_won(matrix, player):
+    el = ' ' + player + ' !'
     if matrix[0][0] == el and matrix[0][1] == el and matrix[0][2] == el or (
             matrix[1][0] == el and matrix[1][1] == el and matrix[1][2] == el or
             matrix[2][0] == el and matrix[2][1] == el and matrix[2][2] == el or
@@ -32,84 +31,74 @@ def is_won(player):
     else:
         return False
 
+
 def is_again():
+    print("\033[0m")
     again = input('Type "Y" if you want to play again:  ')
     if again == "Y" or again == "y":
-        matrix = [[0] * 3 for i in range(3)]
-        for i in range(3):
-            for j in range(3):
-                matrix[i][j] = '__ !'
-        print_board(matrix)
-        play=True
+        play = True
     else:
-        sys.exit("Game over!")
-
+        play = False
 
     return play
 
-def ask_input(player):  # input и проверки ввода
 
-    try:
-        player_row, player_col = (
-            input(f'Enter position (row _ column) using "spase bar" for player "{player}": ').split())
-        player_row, player_col = int(player_row), int(player_col)
+def ask_input(matrix, player, color):
+    while True:  # input и проверки ввода
 
-        if player_row < 0 or player_row > 2 or player_col < 0 or player_col > 2:
-            print("\033[31m{}".format('Out of range. Try other digits'))
-            print("\033[0m{}".format(''))
-            ask_input(player)
+        try:
+            player_row, player_col = (
+                input(f'{color}Enter position (row _ column) using "spase bar" for player "{player}": ').split())
+            player_row, player_col = int(player_row), int(player_col)
 
-            # loop(matrix)
-        elif matrix[player_row][player_col] == '__ !':
-            return player_row, player_col
+            if player_row < 0 or player_row > 2 or player_col < 0 or player_col > 2:
+                print("\033[31m{}".format('Out of range. Try other digits'))
+                print("\033[0m{}".format(''))
 
-        # elif matrix[player_row][player_col] == '__ !':
-        #     matrix[player_row][player_col] = ' ' + player + ' !'
+            elif matrix[player_row][player_col] == '__ !':
+                return player_row, player_col
 
-        else:
-            print('\033[31mThis position already occupied. Do again')
-            print("\033[0m")
-            ask_input(player)
-    except ValueError:
-        print("\033[31m{}".format('Wrong input. '))
-        print("\033[0mTry again")
-        ask_input(player)
+            else:
+                print('\033[31mThis position already occupied. Do again')
+                print("\033[0m")
+
+        except ValueError:
+            print("\033[31m{}".format('Wrong input. '))
+            print("\033[0mTry again")
+
 
 def loop(matrix):
     cycle = 0
     while True:
         if bool(cycle % 2):  # чей ход
             player = 'Y'
-            print("\033[33m")
+            color = "\033[33m"
+
         else:
             player = 'X'
-            print("\033[36m")
+            color = "\033[36m"
 
         if cycle == 9:
-            print("\033[35m{}".format('Draw in the game. No winner.'))  # проверить на ничью
-            print("\033[0m{}".format(''))
+            print("\033[35mDraw in the game. No winner.")  # проверить на ничью
+            break
         cycle += 1
-        row, column = ask_input(player)
+        row, column = ask_input(matrix, player, color)
 
         matrix[row][column] = ' ' + player + ' !'
         print('cycle:', cycle)
         print_board(matrix)
-        if is_won(player):
-            print("\033[31m{}".format(f'Player "{player}" won the game!'))
-            print("\033[0m")
+        if is_won(matrix, player):
+            print(f"{color}Player {player} won the game!")
             break
 
-
-        # print("ask_input", row, column)
-
-
-
 def game():
-    print_board(matrix)
-    loop(matrix)
+    play = True
+    while play:
+        matrix = create_matrix()
+        print_board(matrix)
+        loop(matrix)
+        play = is_again()
 
-while play:
 
-    game()
-    is_again()
-
+game()
+print('Game over. See you next time, amigo! :)')
