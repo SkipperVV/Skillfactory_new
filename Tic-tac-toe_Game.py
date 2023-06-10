@@ -71,7 +71,7 @@ def loop(matrix):
     cycle = 0
     while True:
         if bool(cycle % 2):  # чей ход
-            player = 'Y'
+            player = 'O'
             color = "\033[33m"
 
         else:
