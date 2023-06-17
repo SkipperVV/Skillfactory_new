@@ -62,7 +62,7 @@ def change_data(diff_record):
     diff_record['site'] = change('Site name: ', diff_record['site'])
     diff_record['login'] = change('login: ', diff_record['login'])
     length = input(
-        "Do you want me to generate your password?: \n(Enter length of password, enter if you want to create the password manually):  ")
+        "Do you want me to generate your password?: \n(Enter length of password, press Enter if you want to create the password manually):  ")
     if not length:
         diff_record['password'] = change('password: ', diff_record['password'])
     else:
