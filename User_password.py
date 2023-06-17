@@ -1,6 +1,7 @@
 import json
 import random
 import string
+import sys
 
 
 def load_db(filename='users_db.json'):
@@ -17,7 +18,12 @@ def save_db(db, filename='users_db.json'):
 
 db = load_db()
 '''Список из словарей'''
-
+def print_db(db): # Распечатка внутренностей библиотеки
+    print('Users"s data')
+    for i in range(0, len(db)):
+        print('Username:',db[i]['login'],end='; ')
+        print('Password:',db[i]['password'],end='; ')
+        print('Site:',db[i]['site'])
 
 def add_user(db):
     site = input('Новая запись.\nВведите имя сайта (enter to cancel):  ')
@@ -52,8 +58,7 @@ def password_generator(length):
 
 
 def change_data(diff_record):
-    length = 0
-    print("Changing user's record>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print("Changing user's record   >>>>>>>>>>>>>>>>>>>>>>>>>")
     diff_record['site'] = change('Site name: ', diff_record['site'])
     diff_record['login'] = change('login: ', diff_record['login'])
     length = input(
@@ -79,9 +84,28 @@ def choose_user_to_change(db):  # Распечатать пользовател�
         # print(db[i]['site'])
 
 
-choose_user_to_change(db)
+# choose_user_to_change(db)
 # add_user(db)
 # print(db)
+def main_menu():
+    print("\nUsers's data operations >>>>>>>>>>>>>>>>>>>>>>>>>>" )
+    choice=int(input('Add a new user = 1\n'
+                     'Change user data = 2\n'
+                     'Print all users data = 3\n'
+                     'Exit = 0\n'
+                     '---------------------------\n'
+                     'Enter the number of action:\t'))
+    if choice==1:
+        add_user(db)
+    elif choice==2:
+        choose_user_to_change(db)
+    elif choice==3:
+        print_db(db)
+    elif choice==0:
+        sys.exit('Goodby')
+
+while True:
+    main_menu()
 
 
 # *****************************************************
