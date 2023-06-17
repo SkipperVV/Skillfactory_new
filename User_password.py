@@ -18,12 +18,13 @@ def save_db(db, filename='users_db.json'):
 
 db = load_db()
 '''Список из словарей'''
-def print_db(db): # Распечатка внутренностей библиотеки
-    print('Users"s data')
+
+
+def print_db(db):  # Распечатка внутренностей библиотеки
+    print('Users"s data:')
     for i in range(0, len(db)):
-        print('Username:',db[i]['login'],end='; ')
-        print('Password:',db[i]['password'],end='; ')
-        print('Site:',db[i]['site'])
+        print(f"Username: {db[i]['login']:10} |Password: {db[i]['password']:15} | Site:,{db[i]['site']:30} |")
+
 
 def add_user(db):
     site = input('Новая запись.\nВведите имя сайта (enter to cancel):  ')
@@ -62,7 +63,7 @@ def change_data(diff_record):
     diff_record['site'] = change('Site name: ', diff_record['site'])
     diff_record['login'] = change('login: ', diff_record['login'])
     length = input(
-        "Do you want me to generate your password?: \n(Enter length of password, press Enter if you want to create the password manually):  ")
+        "Do you want me to generate your password?: \n(Enter length of password, Press Enter if you want to create the password manually):  ")
     if not length:
         diff_record['password'] = change('password: ', diff_record['password'])
     else:
@@ -80,27 +81,46 @@ def choose_user_to_change(db):  # Распечатать пользовател�
             print('You choode user:', db[i]['login'])
             change_data(db[i])
 
+        # print(db[i]['password'], end=', site: ')  '''Распечатка внутренностей библиотеки '''
+        # print(db[i]['site'])
+
+
+# choose_user_to_change(db)
+# add_user(db)
+# print(db)
+def search(db):
+    user = input('Enter username to find:\t')
+    for items in db:
+        if user == items['login']:
+            responce = f"\nFound:\nUser: {user:10} | password: {items['password']:10} | site: {items['site']}"
+            return responce
+    responce=f'\nUser: {user} not found.'
+    return responce
+
 
 def main_menu():
-    print("\nUsers's data operations >>>>>>>>>>>>>>>>>>>>>>>>>>" )
-    choice=int(input('Add a new user = 1\n'
-                     'Change user data = 2\n'
-                     'Print all users data = 3\n'
-                     'Exit = 0\n'
-                     '---------------------------\n'
-                     'Enter the number of action:\t'))
-    if choice==1:
+    print("____________________________\nUsers's data operations >>>>")
+    choice = int(input('Add a new user = 1\n'
+                       'Change user data = 2\n'
+                       'Print all users data = 3\n'
+                       'Find user by name = 4\n'
+                       'Exit = 0\n'
+                       '---------------------------\n'
+                       'Enter the number of action:\t'))
+    if choice == 1:
         add_user(db)
-    elif choice==2:
+    elif choice == 2:
         choose_user_to_change(db)
-    elif choice==3:
+    elif choice == 3:
         print_db(db)
-    elif choice==0:
+    elif choice == 4:
+        print(search(db))
+    elif choice == 0:
         sys.exit('Goodby')
+
 
 while True:
     main_menu()
-
 
 # *****************************************************
 # db = [
