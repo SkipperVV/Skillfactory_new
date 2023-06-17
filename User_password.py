@@ -80,13 +80,7 @@ def choose_user_to_change(db):  # Распечатать пользовател�
             print('You choode user:', db[i]['login'])
             change_data(db[i])
 
-        # print(db[i]['password'], end=', site: ')  '''Распечатка внутренностей библиотеки '''
-        # print(db[i]['site'])
 
-
-# choose_user_to_change(db)
-# add_user(db)
-# print(db)
 def main_menu():
     print("\nUsers's data operations >>>>>>>>>>>>>>>>>>>>>>>>>>" )
     choice=int(input('Add a new user = 1\n'
