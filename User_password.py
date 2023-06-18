@@ -21,7 +21,7 @@ db = load_db()
 
 
 def print_db(db):  # Распечатка внутренностей библиотеки
-    print('Users"s data:')
+    print(f"{len(db)} users found:")
     for i in range(0, len(db)):
         print(f"Username: {db[i]['login']:10} |Password: {db[i]['password']:15} | Site:,{db[i]['site']:30} |")
 
@@ -78,11 +78,8 @@ def choose_user_to_change(db):  # Распечатать пользовател�
     user_to_change = db[number_to_change]['login']
     for i in range(0, len(db)):
         if user_to_change == db[i]['login']:
-            print('You choode user:', db[i]['login'])
-            change_data(db[i])
-
-        # print(db[i]['password'], end=', site: ')  '''Распечатка внутренностей библиотеки '''
-        # print(db[i]['site'])
+            print('You chose user:', db[i]['login'])
+            return i
 
 
 # choose_user_to_change(db)
@@ -94,29 +91,59 @@ def search(db):
         if user == items['login']:
             responce = f"\nFound:\nUser: {user:10} | password: {items['password']:10} | site: {items['site']}"
             return responce
-    responce=f'\nUser: {user} not found.'
+    responce = f'\nUser: {user} not found.'
     return responce
+
+
+def remove_user(db):
+    user_to_del = choose_user_to_change(db)
+    print(f"'{db[user_to_del]['login']}' has been removed")
+    del db[user_to_del]
+    save_changes = input("Save changes? y/N     ")
+    match save_changes.lower():
+        case 'y':
+            save_db(db)
+        case _:
+            print('Changes cancelled')
 
 
 def main_menu():
     print("____________________________\nUsers's data operations >>>>")
-    choice = int(input('Add a new user = 1\n'
-                       'Change user data = 2\n'
-                       'Print all users data = 3\n'
-                       'Find user by name = 4\n'
-                       'Exit = 0\n'
-                       '---------------------------\n'
-                       'Enter the number of action:\t'))
-    if choice == 1:
-        add_user(db)
-    elif choice == 2:
-        choose_user_to_change(db)
-    elif choice == 3:
-        print_db(db)
-    elif choice == 4:
-        print(search(db))
-    elif choice == 0:
-        sys.exit('Goodby')
+    choice = (input('Add a new user = 1\n'
+                    'Change user data = 2\n'
+                    'Print all users data = 3\n'
+                    'Find user by name = 4\n'
+                    'Remove user = 5\n'
+                    'Exit = 0\n'
+                    '---------------------------\n'
+                    'Enter the number of action:\t'))
+    # if choice == 1:
+    #     add_user(db)
+    # elif choice == 2:
+    #     choose_user_to_change(db)
+    # elif choice == 3:
+    #     print_db(db)
+    # elif choice == 4:
+    #     print(search(db))
+    # elif choice == 0:
+    #     sys.exit('Goodby')
+
+    match choice:
+        case '1':
+            add_user(db)
+        case '2':
+            i = choose_user_to_change(db)
+            change_data(db[i])
+        case '3':
+            print_db(db)
+        case '4':
+            print(search(db))
+        case '5':
+            remove_user(db)
+        case '0':
+            sys.exit('Goodbye!')
+        case _:
+            print('Wrong input!')
 
 
 while True:
